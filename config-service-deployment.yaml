@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: isisi/config-server
+          image: ovejazo/config-server
           ports:
             - containerPort: 8081
 ---

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: eureka-server
-          image: isisi/eureka-server
+          image: ovejazo/eureka-server
           ports:
             - containerPort: 8761
 ---

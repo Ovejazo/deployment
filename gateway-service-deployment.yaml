@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: isisi/gateway-service
+          image: ovejazo/gateway-service
           ports:
             - containerPort: 8080
 ---
