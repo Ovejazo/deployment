@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-bdclient-pv
+  name: bdclient-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/db-bdclient-data"
+    path: "/data/bdclient-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-bdclient-pvc
+  name: bdclient-pvc
   labels:
     app: postgres
     tier: database
@@ -31,20 +31,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-bdclient-deployment
+  name: bdclient-deployment
   labels:
-    app: db-bdclient-deployment
+    app: bdclient-deployment
     tier: database
 spec:
   selector:
     matchLabels:
-      app: db-bdclient-deployment
+      app: bdclient-deployment
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: db-bdclient-deployment
+        app: bdclient-deployment
         tier: database
     spec:
       containers:
@@ -61,18 +61,18 @@ spec:
                   key: DB_PASSWORD
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-bdclient-data
+              name: bdclient-data
       volumes:
-        - name: db-bdclient-data
+        - name: bdclient-data
           persistentVolumeClaim:
-            claimName: db-bdclient-pvc
+            claimName: bdclient-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-bdclient-service
+  name: bdclient-service
   labels:
-    app: db-bdclient-service
+    app: bdclient-service
     tier: database
 spec:
   ports:
@@ -80,6 +80,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: db-bdclient-deployment
+    app: bdclient-deployment
     tier: database
   type: LoadBalancer

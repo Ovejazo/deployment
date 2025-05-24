@@ -19,18 +19,3 @@ spec:
           image: ovejazo/clientms
           ports:
             - containerPort: 8090
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ms-client-service
-  labels:
-    app: ms-client-service
-spec:
-  selector:
-    app: ms-client-deployment
-  ports:
-    - protocol: TCP
-      port: 8090
-      targetPort: 8090
-  type: LoadBalancer
