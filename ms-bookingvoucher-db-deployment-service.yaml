@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: db-bdbookingVoucher-pv
+  labels:
+    type: local
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/data/db-bdbookingVoucher-data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: db-bdbookingVoucher-pvc
+  labels:
+    app: postgres
+    tier: database
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-bdbookingVoucher-deployment
+  labels:
+    app: db-bdbookingVoucher-deployment
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: db-bdbookingVoucher-deployment
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: db-bdbookingVoucher-deployment
+        tier: database
+    spec:
+      containers:
+        - name: bdbookingVoucher
+          image: postgres
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DB_PASSWORD
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db-bdbookingVoucher-data
+      volumes:
+        - name: db-bdbookingVoucher-data
+          persistentVolumeClaim:
+            claimName: db-bdbookingVoucher-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-bdbookingVoucher-service
+  labels:
+    app: db-bdbookingVoucher-service
+    tier: database
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    app: db-bdbookingVoucher-deployment
+    tier: database
+  type: LoadBalancer
