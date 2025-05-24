@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-especialday-deployment
+  labels:
+    app: ms-especialday-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ms-especialday-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ms-especialday-deployment
+    spec:
+      containers:
+        - name: especialdayms
+          image: ovejazo/especialdayms
+          ports:
+            - containerPort: 8095
