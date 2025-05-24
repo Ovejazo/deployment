@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-bookingvoucher-deployment
+  labels:
+    app: ms-bookingvoucher-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ms-bookingvoucher-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ms-bookingvoucher-deployment
+    spec:
+      containers:
+        - name: bookingvoucherms
+          image: ovejazo/bookingvoucherms
+          ports:
+            - containerPort: 8091

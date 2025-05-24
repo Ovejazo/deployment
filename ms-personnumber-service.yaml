@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-personnumber-deployment
+  labels:
+    app: ms-personnumber-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ms-personnumber-deployment
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ms-personnumber-deployment
+    spec:
+      containers:
+        - name: personnumberms
+          image: ovejazo/personnumberms
+          ports:
+            - containerPort: 8094
