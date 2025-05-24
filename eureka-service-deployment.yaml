@@ -15,8 +15,8 @@ spec:
         app: eureka-server-deployment
     spec:
       containers:
-        - name: eureka-server
-          image: ovejazo/eureka-server
+        - name: eureka-service
+          image: ovejazo/eureka-service
           ports:
             - containerPort: 8761
 ---

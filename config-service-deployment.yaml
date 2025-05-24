@@ -15,8 +15,8 @@ spec:
         app: config-server-deployment
     spec:
       containers:
-        - name: config-server
-          image: ovejazo/config-server
+        - name: config-service
+          image: ovejazo/config-service
           ports:
             - containerPort: 8081
 ---
