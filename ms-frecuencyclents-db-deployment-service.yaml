@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-bdfrecuencyclents-pv
+  name: bdfrecuencyclents-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/db-bdfrecuencyclents-data"
+    path: "/data/bdfrecuencyclents-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-bdfrecuencyclents-pvc
+  name: bdfrecuencyclents-pvc
   labels:
     app: postgres
     tier: database
@@ -31,20 +31,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-bdfrecuencyclents-deployment
+  name: bdfrecuencyclents-deployment
   labels:
-    app: db-bdfrecuencyclents-deployment
+    app: bdfrecuencyclents-deployment
     tier: database
 spec:
   selector:
     matchLabels:
-      app: db-bdfrecuencyclents-deployment
+      app: bdfrecuencyclents-deployment
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: db-bdfrecuencyclents-deployment
+        app: bdfrecuencyclents-deployment
         tier: database
     spec:
       containers:
@@ -61,18 +61,18 @@ spec:
                   key: DB_PASSWORD
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-bdfrecuencyclents-data
+              name: bdfrecuencyclents-data
       volumes:
-        - name: db-bdfrecuencyclents-data
+        - name: bdfrecuencyclents-data
           persistentVolumeClaim:
-            claimName: db-bdfrecuencyclents-pvc
+            claimName: bdfrecuencyclents-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-bdfrecuencyclents-service
+  name: bdfrecuencyclents-service
   labels:
-    app: db-bdfrecuencyclents-service
+    app: bdfrecuencyclents-service
     tier: database
 spec:
   ports:
@@ -80,6 +80,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: db-bdfrecuencyclents-deployment
+    app: bdfrecuencyclents-deployment
     tier: database
   type: LoadBalancer

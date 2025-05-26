@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-bdfee-pv
+  name: bdfee-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/db-bdfee-data"
+    path: "/data/bdfee-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-bdfee-pvc
+  name: bdfee-pvc
   labels:
     app: postgres
     tier: database
@@ -31,20 +31,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-bdfee-deployment
+  name: bdfee-deployment
   labels:
-    app: db-bdfee-deployment
+    app: bdfee-deployment
     tier: database
 spec:
   selector:
     matchLabels:
-      app: db-bdfee-deployment
+      app: bdfee-deployment
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: db-bdfee-deployment
+        app: bdfee-deployment
         tier: database
     spec:
       containers:
@@ -61,18 +61,18 @@ spec:
                   key: DB_PASSWORD
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-bdfee-data
+              name: bdfee-data
       volumes:
-        - name: db-bdfee-data
+        - name: bdfee-data
           persistentVolumeClaim:
-            claimName: db-bdfee-pvc
+            claimName: bdfee-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-bdfee-service
+  name: bdfee-service
   labels:
-    app: db-bdfee-service
+    app: bdfee-service
     tier: database
 spec:
   ports:
@@ -80,6 +80,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: db-bdfee-deployment
+    app: bdfee-deployment
     tier: database
   type: LoadBalancer

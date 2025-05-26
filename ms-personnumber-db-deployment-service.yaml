@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-bdpersonnumber-pv
+  name: bdpersonnumber-pv
   labels:
     type: local
 spec:
@@ -11,12 +11,12 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data/db-bdpersonnumber-data"
+    path: "/data/bdpersonnumber-data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: db-bdpersonnumber-pvc
+  name: bdpersonnumber-pvc
   labels:
     app: postgres
     tier: database
@@ -31,20 +31,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-bdpersonnumber-deployment
+  name: bdpersonnumber-deployment
   labels:
-    app: db-bdpersonnumber-deployment
+    app: bdpersonnumber-deployment
     tier: database
 spec:
   selector:
     matchLabels:
-      app: db-bdpersonnumber-deployment
+      app: bdpersonnumber-deployment
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: db-bdpersonnumber-deployment
+        app: bdpersonnumber-deployment
         tier: database
     spec:
       containers:
@@ -61,18 +61,18 @@ spec:
                   key: DB_PASSWORD
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: db-bdpersonnumber-data
+              name: bdpersonnumber-data
       volumes:
-        - name: db-bdpersonnumber-data
+        - name: bdpersonnumber-data
           persistentVolumeClaim:
-            claimName: db-bdpersonnumber-pvc
+            claimName: bdpersonnumber-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-bdpersonnumber-service
+  name: bdpersonnumber-service
   labels:
-    app: db-bdpersonnumber-service
+    app: bdpersonnumber-service
     tier: database
 spec:
   ports:
@@ -80,6 +80,6 @@ spec:
       targetPort: 5432
       protocol: TCP
   selector:
-    app: db-bdpersonnumber-deployment
+    app: bdpersonnumber-deployment
     tier: database
   type: LoadBalancer
